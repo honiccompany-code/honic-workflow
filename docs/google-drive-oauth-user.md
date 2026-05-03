@@ -21,11 +21,10 @@ This app **currently uses a service account JWT** (`google-drive-server.ts`). Se
 
 4. **APIs & Services → Credentials → Create credentials → OAuth client ID**
    - Application type: **Web application**.
-   - **Authorized JavaScript origins** (dev):  
-     `http://localhost:3000`
-   - **Authorized redirect URIs** (example for Next.js):  
-     `http://localhost:3000/api/google/oauth/callback`  
-     (Adjust host/port/path to match where you implement the callback.)
+   - **Authorized JavaScript origins**: add every origin users hit (match `NEXT_PUBLIC_APP_URL`):
+     - Production: e.g. `https://inova.honiccompany.com`
+     - Local preview only if you use `.env.development.local` with `http://localhost:3000` (see `docs/production-hosting.md`).
+   - **Authorized redirect URIs**: must match **exactly** `GOOGLE_OAUTH_REDIRECT_URI`, or if unset, `NEXT_PUBLIC_APP_URL` + `/api/google/oauth/callback` (see `src/lib/site-url.ts`). There is no hidden localhost fallback in production builds.
 
 5. Save **Client ID** and **Client secret** → put them in **server-only** env (never expose the secret to the browser).
 
@@ -37,9 +36,10 @@ Typical names:
 
 | Variable | Purpose |
 |----------|---------|
+| `NEXT_PUBLIC_APP_URL` | Public site origin (no trailing slash). Used for share links and, if `GOOGLE_OAUTH_REDIRECT_URI` is unset, the OAuth callback URL. |
 | `GOOGLE_OAUTH_CLIENT_ID` | Web client ID |
 | `GOOGLE_OAUTH_CLIENT_SECRET` | Web client secret |
-| `GOOGLE_OAUTH_REDIRECT_URI` | Must exactly match a redirect URI in Cloud Console |
+| `GOOGLE_OAUTH_REDIRECT_URI` | Optional; if set, must exactly match a redirect URI in Cloud Console. If omitted, defaults to `NEXT_PUBLIC_APP_URL` + `/api/google/oauth/callback`. |
 | `GOOGLE_DRIVE_FOLDER_ID` | Root folder the user owns or can write to (same idea as today) |
 
 After the first successful OAuth, you’ll obtain a **refresh token** (long-lived). Store it securely:

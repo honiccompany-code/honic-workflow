@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
+import { getPublicAppUrlFromEnv } from "@/lib/site-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,9 +14,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+function metadataBaseFromEnv(): URL | undefined {
+  const u = getPublicAppUrlFromEnv();
+  if (!u) return undefined;
+  try {
+    return new URL(u.endsWith("/") ? u : `${u}/`);
+  } catch {
+    return undefined;
+  }
+}
+
+const metadataBase = metadataBaseFromEnv();
+
 export const metadata: Metadata = {
   title: "Honic · Project workflow",
   description: "Workflow checklist and project pipeline per registered client.",
+  ...(metadataBase ? { metadataBase } : {}),
 };
 
 export default function RootLayout({

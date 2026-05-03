@@ -31,12 +31,12 @@ function CopyButton({ text }: { text: string }) {
 export function ProjectShareLinkPanel({
   projectId,
   existingLinks,
-  siteOrigin,
+  shareLinkOrigin,
 }: {
   projectId: string;
   existingLinks: ProjectShareLinkRow[];
-  /** e.g. https://app.example.com — used for absolute URLs in the list. */
-  siteOrigin: string;
+  /** Per-client `https://{name}-api.parent` when NEXT_PUBLIC_SHARE_PARENT_DOMAIN is set; else main app origin. */
+  shareLinkOrigin: string;
 }) {
   const router = useRouter();
   const bound = createClientShareLinkAction.bind(null, projectId);
@@ -46,7 +46,7 @@ export function ProjectShareLinkPanel({
     if (state?.ok) router.refresh();
   }, [state, router]);
 
-  const origin = siteOrigin.replace(/\/$/, "");
+  const origin = shareLinkOrigin.replace(/\/$/, "");
   const linkRows = existingLinks.map((row) => ({
     ...row,
     fullUrl: origin ? `${origin}/share/${row.token}` : `/share/${row.token}`,
@@ -56,8 +56,10 @@ export function ProjectShareLinkPanel({
     <section className="border-dash-border bg-dash-card mb-8 rounded-2xl border p-5 shadow-sm sm:p-6">
       <h2 className="text-dash-foreground mb-1 text-base font-semibold">Client share link</h2>
       <p className="text-dash-muted-foreground mb-4 text-sm leading-relaxed">
-        Create an unlisted URL your client can open without logging in. They only see this project summary, the
-        activity checklist, and files they can preview or download — not the rest of Honic.
+        Create an unlisted URL your client can open without logging in. With a share parent domain configured, links
+        use that client&apos;s branded host (name-based slug ending in <span className="font-mono text-xs">-api</span>,
+        or a custom value from the database). They only see this project summary, the activity checklist, and files
+        they can preview or download — not the rest of Honic.
       </p>
 
       <form action={formAction} className="mb-6 flex flex-wrap items-center gap-3">

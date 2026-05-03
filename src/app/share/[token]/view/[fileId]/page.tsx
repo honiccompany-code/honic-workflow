@@ -50,29 +50,29 @@ export default async function PublicShareFileViewPage(props: {
   const fileApiBasePath = `/api/share/${encodeURIComponent(token)}/file`;
 
   return (
-    <>
-      <div className="mb-6">
-        <h1 className="text-dash-foreground text-xl font-semibold tracking-tight">{meta.name}</h1>
-        <p className="text-dash-muted-foreground mt-1 text-sm">Shared file — preview and download only.</p>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="border-dash-border from-dash-card to-dash-muted/20 mb-6 rounded-3xl border bg-gradient-to-br p-5 shadow-sm sm:p-6">
+        <h1 className="text-dash-foreground text-xl font-bold tracking-tight text-balance sm:text-2xl">{meta.name}</h1>
+        <p className="text-dash-muted-foreground mt-2 text-sm">Shared file — preview and download only.</p>
+
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+          <Link
+            href={`/share/${encodeURIComponent(token)}`}
+            className="border-dash-border bg-dash-card text-dash-foreground hover:border-dash-accent/40 focus-visible:ring-dash-accent inline-flex min-h-11 items-center justify-center rounded-xl border px-4 text-center text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          >
+            ← Back to project
+          </Link>
+          <a
+            href={`${fileApiBasePath}/${encodeURIComponent(fileId)}?download=1`}
+            download={meta.name}
+            className="border-dash-border bg-dash-accent/15 text-dash-accent-dim hover:bg-dash-accent/25 focus-visible:ring-dash-accent inline-flex min-h-11 items-center justify-center rounded-xl border px-4 text-center text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:outline-none"
+          >
+            Download
+          </a>
+        </div>
       </div>
 
-      <div className="mb-6 flex flex-wrap items-center gap-4">
-        <Link
-          href={`/share/${encodeURIComponent(token)}`}
-          className="text-dash-accent text-sm font-semibold underline-offset-2 hover:underline"
-        >
-          ← Back to project
-        </Link>
-        <a
-          href={`${fileApiBasePath}/${encodeURIComponent(fileId)}?download=1`}
-          download={meta.name}
-          className="text-dash-accent text-sm font-semibold underline-offset-2 hover:underline"
-        >
-          Download
-        </a>
-      </div>
-
-      <div className="flex min-h-0 flex-1 flex-col">
+      <div className="border-dash-border bg-dash-card/80 flex min-h-[50vh] flex-1 flex-col overflow-hidden rounded-3xl border shadow-sm sm:min-h-[60vh]">
         <DriveFilePreview
           mimeType={meta.mimeType}
           fileId={fileId}
@@ -80,6 +80,6 @@ export default async function PublicShareFileViewPage(props: {
           fileApiBasePath={fileApiBasePath}
         />
       </div>
-    </>
+    </div>
   );
 }

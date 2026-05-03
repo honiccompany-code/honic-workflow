@@ -5,6 +5,8 @@ import { Readable, type Readable as ReadableStreamType } from "node:stream";
 import type { drive_v3 } from "googleapis";
 import { google } from "googleapis";
 
+import { getGoogleOAuthRedirectUri } from "@/lib/site-url";
+
 export type DriveFileRow = {
   id: string;
   name: string;
@@ -181,9 +183,7 @@ function isOAuthUserDriveConfigured(): boolean {
 }
 
 function oauthRedirectUri(): string {
-  return (
-    process.env.GOOGLE_OAUTH_REDIRECT_URI?.trim() || "http://localhost:3000/api/google/oauth/callback"
-  );
+  return getGoogleOAuthRedirectUri();
 }
 
 /**

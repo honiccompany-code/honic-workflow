@@ -4,25 +4,14 @@ import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 import { createProjectShareLink } from "@/lib/project-share";
+import { resolveShareLinkOriginForProjectFromHeaders } from "@/lib/share-link-origin";
+import { resolvePublicSiteBaseUrl } from "@/lib/site-url";
 
 export type CreateShareLinkState = { ok: true; url: string } | { ok: false; message: string } | null;
 
-function publicShareBaseUrl(): string {
-  const env = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (env) return env.replace(/\/$/, "");
-
-  return "";
-}
-
 async function inferBaseUrlFromRequest(): Promise<string> {
-  const fromEnv = publicShareBaseUrl();
-  if (fromEnv) return fromEnv;
-
   const h = await headers();
-  const host = h.get("x-forwarded-host") ?? h.get("host");
-  if (!host) return "";
-  const proto = h.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  return `${proto}://${host}`;
+  return resolvePublicSiteBaseUrl(h);
 }
 
 /** For building absolute share URLs in Server Components (e.g. link list). */
@@ -40,9 +29,10 @@ export async function createClientShareLinkAction(
     return { ok: false, message: created.error };
   }
 
-  const base = await inferBaseUrlFromRequest();
+  const h = await headers();
+  const origin = await resolveShareLinkOriginForProjectFromHeaders(projectId, h);
   const path = `/share/${created.token}`;
-  const url = base ? `${base}${path}` : path;
+  const url = origin ? `${origin.replace(/\/$/, "")}${path}` : path;
 
   revalidatePath(`/projects/${projectId}/work`);
   return { ok: true, url };

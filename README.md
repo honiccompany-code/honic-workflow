@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the dev server URL (often [http://localhost:3000](http://localhost:3000)) with your browser. For production URLs, OAuth, and share links, set **`NEXT_PUBLIC_APP_URL`** (see **`docs/production-hosting.md`** and **`.env.example`**).
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

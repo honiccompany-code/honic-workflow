@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { google } from "googleapis";
 
+import { getGoogleOAuthRedirectUri } from "@/lib/site-url";
+
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
@@ -17,13 +19,19 @@ export async function GET(request: Request) {
 
   const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID?.trim();
   const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET?.trim();
-  const redirectUri =
-    process.env.GOOGLE_OAUTH_REDIRECT_URI?.trim() || "http://localhost:3000/api/google/oauth/callback";
+  const redirectUri = getGoogleOAuthRedirectUri();
 
   if (!clientId || !clientSecret) {
     return new NextResponse("Server missing GOOGLE_OAUTH_CLIENT_ID or GOOGLE_OAUTH_CLIENT_SECRET.", {
       status: 500,
     });
+  }
+
+  if (!redirectUri) {
+    return new NextResponse(
+      "Set NEXT_PUBLIC_APP_URL or GOOGLE_OAUTH_REDIRECT_URI (see docs/production-hosting.md).",
+      { status: 500 },
+    );
   }
 
   const oauth2 = new google.auth.OAuth2(clientId, clientSecret, redirectUri);

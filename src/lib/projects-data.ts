@@ -11,7 +11,7 @@ export type TrackedProjectListRow = {
   project_type: string;
   updated_at: string;
   registered_client_id: string;
-  registered_clients: { name: string } | null;
+  registered_clients: { name: string; share_subdomain?: string | null } | null;
 };
 
 export type TrackedProjectDetail = {
@@ -28,7 +28,7 @@ export type TrackedProjectDetail = {
   registered_client_id: string;
   /** Google Drive folder for uploads / files (under GOOGLE_DRIVE_FOLDER_ID). */
   google_drive_folder_id: string | null;
-  registered_clients: { name: string } | null;
+  registered_clients: { name: string; share_subdomain?: string | null } | null;
 };
 
 export type ProjectMilestoneRow = {
@@ -115,7 +115,7 @@ export async function loadProjectDetail(projectId: string): Promise<{
   const { data: proj, error: pErr } = await supabase
     .from("tracked_projects")
     .select(
-      "id, title, description, status, priority, project_type, workflow_checklist, start_date, target_end_date, updated_at, registered_client_id, google_drive_folder_id, registered_clients ( name )"
+      "id, title, description, status, priority, project_type, workflow_checklist, start_date, target_end_date, updated_at, registered_client_id, google_drive_folder_id, registered_clients ( name, share_subdomain )"
     )
     .eq("id", projectId)
     .maybeSingle();

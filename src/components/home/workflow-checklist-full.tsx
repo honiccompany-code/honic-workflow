@@ -223,7 +223,30 @@ export function WorkflowChecklistFull({
           </div>
         </div>
       ) : null}
-      <div className="overflow-x-auto">
+      {readOnly && rows.length === 1 ? (
+        <ul className="flex flex-col gap-2 p-2 md:hidden">
+          {WORKFLOW_STEPS.map((step) => {
+            const st = rows[0]!.checklist[step.key] ?? "pending";
+            return (
+              <li
+                key={step.key}
+                className="border-dash-border bg-dash-muted/25 flex min-h-[52px] items-start justify-between gap-4 rounded-xl border px-4 py-3.5"
+              >
+                <span className="text-dash-foreground min-w-0 flex-1 text-sm font-medium leading-snug">{step.label}</span>
+                <span
+                  title={
+                    st === "not_provided" ? "Provided by another party — outside our scope." : undefined
+                  }
+                  className={`inline-flex shrink-0 items-center justify-center rounded-xl border border-transparent px-3 py-1.5 text-xs font-semibold ${cellClass(st)}`}
+                >
+                  {statusLabel(st)}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+      <div className={readOnly && rows.length === 1 ? "hidden overflow-x-auto md:block" : "overflow-x-auto"}>
         <table
           className={`divide-dash-border w-full divide-y text-xs sm:text-sm ${showIdentityColumns ? "min-w-[1100px]" : "min-w-[720px]"}`}
         >

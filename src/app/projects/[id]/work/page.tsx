@@ -11,6 +11,7 @@ import { formatProjectType } from "@/lib/project-types";
 import { isDashboardRegistryOk } from "@/lib/dashboard-types";
 import { getPublicSiteBaseUrl } from "@/app/projects/[id]/share-actions";
 import { ProjectShareLinkPanel } from "@/components/projects/project-share-link-panel";
+import { buildShareLinkOrigin } from "@/lib/share-link-origin";
 import { isDriveConfigured } from "@/lib/google-drive-server";
 import { listShareLinksForProject } from "@/lib/project-share";
 import { loadProjectDetail, type TrackedProjectDetail } from "@/lib/projects-data";
@@ -53,7 +54,8 @@ export default async function ProjectWorkPage(props: { params: Promise<{ id: str
   const driveReady = isDriveConfigured();
   const projectDriveFolderId = project.google_drive_folder_id;
   const shareLinks = await listShareLinksForProject(project.id);
-  const siteOrigin = await getPublicSiteBaseUrl();
+  const fallbackOrigin = await getPublicSiteBaseUrl();
+  const shareLinkOrigin = buildShareLinkOrigin(project.registered_clients, fallbackOrigin);
 
   return (
     <DashboardShell
@@ -107,7 +109,7 @@ export default async function ProjectWorkPage(props: { params: Promise<{ id: str
         <p className="text-dash-muted-foreground mb-8 max-w-3xl text-sm leading-relaxed">{project.description}</p>
       ) : null}
 
-      <ProjectShareLinkPanel projectId={project.id} existingLinks={shareLinks} siteOrigin={siteOrigin} />
+      <ProjectShareLinkPanel projectId={project.id} existingLinks={shareLinks} shareLinkOrigin={shareLinkOrigin} />
 
       <section
         id="activity-checklist"
