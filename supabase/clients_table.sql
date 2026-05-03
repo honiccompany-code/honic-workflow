@@ -1,0 +1,9 @@
+-- Deprecated: use the numbered migrations instead (run in order):
+--   001_schema_clients_projects.sql
+--   002_rls_policies.sql
+--   003_functions_and_procedures.sql
+--   004_invoices_client_names.sql (optional RPC on invoices)
+--   005_registered_clients_sync.sql — invoice names → registered_clients + trigger
+--   006_project_tracking.sql — tracked_projects, milestones, tasks
+--   007_workflow_checklist.sql — workflow_checklist JSON on tracked_projects
+--   008_project_types.sql — FYP / research / product prototype / product / MVP types

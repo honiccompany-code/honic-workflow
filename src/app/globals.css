@@ -3,6 +3,19 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --dash-canvas: #f1f5f9;
+  --dash-foreground: #0f172a;
+  --dash-muted-foreground: #64748b;
+  --dash-card: #ffffff;
+  --dash-border: #e2e8f0;
+  --dash-muted: #f8fafc;
+  --dash-header: rgba(255, 255, 255, 0.82);
+  --dash-sidebar: #0f172a;
+  --dash-sidebar-muted: #94a3b8;
+  --dash-sidebar-hover: rgba(51, 65, 85, 0.55);
+  --dash-accent: #06b6d4;
+  --dash-accent-dim: #0891b2;
 }
 
 @theme inline {
@@ -10,17 +23,57 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-dash-canvas: var(--dash-canvas);
+  --color-dash-foreground: var(--dash-foreground);
+  --color-dash-muted-foreground: var(--dash-muted-foreground);
+  --color-dash-card: var(--dash-card);
+  --color-dash-border: var(--dash-border);
+  --color-dash-muted: var(--dash-muted);
+  --color-dash-header: var(--dash-header);
+  --color-dash-sidebar: var(--dash-sidebar);
+  --color-dash-sidebar-muted: var(--dash-sidebar-muted);
+  --color-dash-sidebar-hover: var(--dash-sidebar-hover);
+  --color-dash-accent: var(--dash-accent);
+  --color-dash-accent-dim: var(--dash-accent-dim);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #020617;
+    --foreground: #f1f5f9;
+
+    --dash-canvas: #020617;
+    --dash-foreground: #f1f5f9;
+    --dash-muted-foreground: #94a3b8;
+    --dash-card: #0f172a;
+    --dash-border: #1e293b;
+    --dash-muted: #1e293b;
+    --dash-header: rgba(15, 23, 42, 0.85);
+    --dash-sidebar: #020617;
+    --dash-sidebar-muted: #64748b;
+    --dash-sidebar-hover: rgba(30, 41, 59, 0.85);
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+.dash-grid-bg {
+  background-color: var(--dash-canvas);
+  background-image:
+    linear-gradient(rgb(148 163 184 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(148 163 184 / 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .dash-grid-bg {
+    background-image:
+      linear-gradient(rgb(148 163 184 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(148 163 184 / 0.06) 1px, transparent 1px);
+  }
 }
